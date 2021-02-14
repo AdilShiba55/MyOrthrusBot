@@ -29,6 +29,8 @@ public class Pokemon {
         return myAttack;
     }
 
+
+
     public String getName() {
         return name;
     }

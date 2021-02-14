@@ -17,6 +17,8 @@ public class GeneralMethods {
         myPokemon.setCurrentHP(PokemonConstants.getMyCurrentHP());
         myPokemon.setFullHP(PokemonConstants.getMyFullHP());
 
+        initializeMyPokemonAttack(myPokemon);
+
         enemyPokemon.setName(PokemonConstants.getEnemyName());
         enemyPokemon.setLevel(PokemonConstants.getEnemyLevel());
         enemyPokemon.setSex(PokemonConstants.getEnemySex());
@@ -24,23 +26,33 @@ public class GeneralMethods {
         enemyPokemon.setFullHP(PokemonConstants.getEnemyFullHP());
     }
 
-    public void initializeMyPokemonAttack() {
-        for(int i = 0; i < 4; i++) {
-
-        }
-    }
-
-    public static boolean exists(String xPath) {
-        try {
-            List<WebElement> elements = Main.driver.findElements(new By.ByXPath(xPath));
-            int exist = elements.size();
-            elements = null;
-            if (exist > 0) {
-                return true;
+    public static void initializeMyPokemonAttack(Pokemon myPokemon) {
+        for (int i = 0; i < 4; i++) {
+            String attackNamePath = String.format(Buttons.ATTACK_NAME_PATH, Integer.toString(i + 1));
+            if (exists(attackNamePath)) {
+                String string = findElement(attackNamePath).getText();
+                myPokemon.getMyAttack().getAttackName()[i] = string;
             }
-            return false;
-        } catch (Exception e) {
-            return false;
+            String attackODPath = String.format(Buttons.ATTACK_OD_PATH, Integer.toString(i + 1));
+            if(exists(attackODPath)) {
+                String string = findElement(attackODPath).getText();
+                int count = Integer.parseInt(string.replaceAll("/\\d+\\sОД", ""));
+                myPokemon.getMyAttack().getAttackOD()[i] = count;
+            }
         }
     }
-}
+
+        public static boolean exists (String xPath){
+            try {
+                List<WebElement> elements = Main.driver.findElements(new By.ByXPath(xPath));
+                int exist = elements.size();
+                elements = null;
+                if (exist > 0) {
+                    return true;
+                }
+                return false;
+            } catch (Exception e) {
+                return false;
+            }
+        }
+    }
