@@ -7,6 +7,11 @@ public class Buttons {
     public static final String BUTTON_PLAY = "//*[@id=\"playbtn\"]";
     public static final String BUTTON_SOUND = "//*[@id=\"soundsBtn\"]/i";
 
-    public static final String ATTACK_NAME_PATH = "//*[@id=\"battle\"]/div/div/div/div[4]/div[1]/div[%]/div/h5";
-    public static String ATTACK_OD_PATH = "\"//*[@id=\\\"battle\\\"]/div/div/div/div[4]/div[1]/div[%s]/div/p\"";
+    public static final String MY_CURRENT_LOCATION = "//*[@id=\"map\"]/div[1]/div[1]/span";
+
+    public static final String ATTACK_NAME_PATH = "//*[@id=\"battle\"]/div/div/div/div[4]/div[1]/div[%s]/div/h5";
+    public static String ATTACK_OD_PATH = "//*[@id=\"battle\"]/div/div/div/div[4]/div[1]/div[1]/div/p";
+
+    public static final String BATTLE_RUN = "//*[@id=\"run-btn\"]";
+    public static final String BATTLE_RUN_CONFIRM = "/html/body/form/div[2]/button[2]";
 }

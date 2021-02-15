@@ -53,7 +53,7 @@ public class PokemonConstants extends GeneralMethods {
     }
 
     public static byte getEnemySex() { // -1 = Самка. 1 = Самец
-        String sex = findElement(ENEMY_POKEMON_SEX).getAttribute("class");
+        String sex = String.valueOf(findElement(ENEMY_POKEMON_SEX).getAttribute("class"));
         if(sex.equals("fa fa-mars")) {return 1;}
         else {return -1;}
     }
