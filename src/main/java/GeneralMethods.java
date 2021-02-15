@@ -104,4 +104,20 @@ public class GeneralMethods {
             name = null;
         }
     }
+
+    public static void escapeFromTheBattle() throws InterruptedException {
+        if(exists(Buttons.BATTLE_RUN)) {
+            findElement(Buttons.BATTLE_RUN).click();
+            getPause();
+        }
+
+        if(exists(Buttons.BATTLE_RUN_CONFIRM)) {
+            findElement(Buttons.BATTLE_RUN_CONFIRM).click();
+            getPause();
+        }
+
+        if(exists(Buttons.BATTLE_RUN)) {
+            findElement(Buttons.BATTLE_RUN).click();
+        }
+    }
 }

@@ -8,10 +8,11 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Main {
-
     public static WebDriver driver;
 
     private Pokemon myPokemon;
@@ -19,8 +20,10 @@ public class Main {
 
     boolean isWorking = true;
     private long fps = 0;
+    private int wildPokemonCount = 0;
 
-    private int MY_ATTACK_NUM = 4;
+
+    private int MY_ATTACK_NUM = 4; //Номер атаки, которую Покемон будет использовать
 
     @Test
     public void startWorking() throws InterruptedException {
@@ -31,11 +34,16 @@ public class Main {
         myPokemon = new Pokemon("myPokemon", 0, 0, (byte) 0, 0, new PokemonAttack());
         enemyPokemon = new Pokemon("enemyPokemon", 0, 0, (byte) 0, 0);
 
+        if (Constants.NICKNAME.isEmpty() || Constants.PASSWORD.isEmpty()) {
+            System.out.println("Введите данные аккаунта для входа в Классе Constants");
+            return;
+        }
+
         driver.findElement(new By.ByXPath(Buttons.BUTTON_LOGIN)).sendKeys(Constants.NICKNAME);
         driver.findElement(new By.ByXPath(Buttons.BUTTON_PASSWORD)).sendKeys(Constants.PASSWORD);
         driver.findElement(new By.ByXPath(Buttons.BUTTON_ENTER)).click();
         GeneralMethods.getPause();
-        List<String> pathWayToPokeCenter = Arrays.asList(Pony.PLAIN, Pony.SIFFOLK_VILLAGE, Pony.EXIT_TO_VILLAGE_FROM_POKECENTER, Pony.SIFFOLK_VILLAGE_POKECENTER);
+        List<String> pathWayToPokeCenter = Arrays.asList(Pony.WASTELAND, Pony.SIFFOLK_VILLAGE, Pony.EXIT_TO_VILLAGE_FROM_POKECENTER, Pony.SIFFOLK_VILLAGE_POKECENTER);
         if (GeneralMethods.exists(Buttons.BUTTON_PLAY)) {
             GeneralMethods.findElement(Buttons.BUTTON_PLAY).click();
         }
@@ -48,14 +56,18 @@ public class Main {
             if (fps > System.currentTimeMillis()) continue;
             fps = System.currentTimeMillis() + (1000);
 
-            GeneralMethods.hunterMode("on");
+            try {
+                GeneralMethods.hunterMode("on");
 
-            String mainLoc = GeneralMethods.findElement(Buttons.MY_CURRENT_LOCATION).getText(); //Получение названия текущей Локации
+                String mainLoc = GeneralMethods.findElement(Buttons.MY_CURRENT_LOCATION).getText(); //Получение названия текущей Локации
 
-            if (mainLoc.equals("Покецентр")) {
-                goFromPokeCenter(pathWayToPokeCenter);
-            } else {
-                battleScript(pathWayToPokeCenter);
+                if (mainLoc.equals("Покецентр")) {
+                    goFromPokeCenter(pathWayToPokeCenter);
+                } else {
+                    battleScript(pathWayToPokeCenter);
+                }
+            } catch (Exception e) {
+                System.out.println("Бах! Ошибка.");
             }
 
 
@@ -70,12 +82,18 @@ public class Main {
             GeneralMethods.clickAttack(MY_ATTACK_NUM);
             GeneralMethods.getPause();
             GeneralMethods.initialize(myPokemon, enemyPokemon);
-            if(enemyPokemon.getCurrentHP() == 0) {
-                if(GeneralMethods.exists(Buttons.BATTLE_RUN)) {
+            GeneralMethods.getPause();
+            ;
+            System.out.println("Побеждено Диких Покемонов: " + wildPokemonCount + "\n" + "Текущее OD: " + myPokemon.getMyAttack().getAttackOD()[MY_ATTACK_NUM - 1]);
+
+            if (enemyPokemon.getCurrentHP() == 0) {
+                wildPokemonCount++;
+                if (GeneralMethods.exists(Buttons.BATTLE_RUN)) {
                     GeneralMethods.findElement(Buttons.BATTLE_RUN).click();
                 }
             }
-            if(myPokemon.getCurrentHP() < (myPokemon.getFullHP() / 2) || myPokemon.getMyAttack().getAttackOD()[MY_ATTACK_NUM - 1] <= 2) {
+            if (myPokemon.getCurrentHP() < (myPokemon.getFullHP() / 2) || myPokemon.getMyAttack().getAttackOD()[MY_ATTACK_NUM - 1] <= 2) {
+                GeneralMethods.escapeFromTheBattle();
                 gotoPokeCenter(pathToPokecenter);
             }
         }
