@@ -1,3 +1,4 @@
+import constants.Buttons;
 import constants.Constants;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -26,26 +27,30 @@ public class Main {
         myPokemon = new Pokemon("myPokemon", 0, 0, (byte) 0, 0, new PokemonAttack());
         enemyPokemon = new Pokemon("enemyPokemon", 0, 0, (byte) 0, 0);
 
-        driver.findElement(new By.ByXPath(Constants.BUTTON_LOGIN)).sendKeys(Constants.NICKNAME);
-        driver.findElement(new By.ByXPath(Constants.BUTTON_PASSWORD)).sendKeys(Constants.PASSWORD);
-        driver.findElement(new By.ByXPath(Constants.BUTTON_ENTER)).click();
+        driver.findElement(new By.ByXPath(Buttons.BUTTON_LOGIN)).sendKeys(Constants.NICKNAME);
+        driver.findElement(new By.ByXPath(Buttons.BUTTON_PASSWORD)).sendKeys(Constants.PASSWORD);
+        driver.findElement(new By.ByXPath(Buttons.BUTTON_ENTER)).click();
         GeneralMethods.getPause();
         List<String> pathWayToPokeCenter = Arrays.asList();
 
-        while(isWorking) {
-            if(fps > System.currentTimeMillis()) return;
+        while (isWorking) {
+            if (fps > System.currentTimeMillis()) return;
             fps = System.currentTimeMillis() + (1000);
 
-            if(GeneralMethods.exists(Constants.BUTTON_PLAY)) {
-                GeneralMethods.findElement(Constants.BUTTON_PLAY).click();
+            try {
+                if (GeneralMethods.exists(Buttons.BUTTON_PLAY)) {
+                    GeneralMethods.findElement(Buttons.BUTTON_PLAY).click();
+                }
+                if (GeneralMethods.exists(Buttons.BUTTON_SOUND)) {
+                    GeneralMethods.findElement(Buttons.BUTTON_SOUND).click();
+                }
+
+
+
+
+            } catch (Exception e) {
+                System.out.println("Бах! Ошибка.");
             }
-            if(GeneralMethods.exists(Constants.BUTTON_SOUND)) {
-                GeneralMethods.findElement(Constants.BUTTON_SOUND).click();
-            }
-
-            
-
-
         }
     }
 }
