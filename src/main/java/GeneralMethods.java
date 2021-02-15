@@ -6,6 +6,10 @@ import java.util.List;
 
 public class GeneralMethods {
 
+    public static void getPause() throws InterruptedException {
+        Thread.sleep(1000);
+    }
+
     public static WebElement findElement(String xPath) {
         return Main.driver.findElement(new By.ByXPath(xPath));
     }
